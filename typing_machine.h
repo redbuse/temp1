@@ -10,8 +10,8 @@
 class TypingMachine {
 private :
 	Node *CurNode;
-	char sperator;
-	int count;
+		int count;
+
  public:
   TypingMachine();
   void HomeKey();

@@ -4,7 +4,7 @@
 
 TypingMachine::TypingMachine() {
 	Node* node = new Node(' ');
-	this->CurNode = node;
+    CurNode = node;
 	count = 0;
   return;
 }
@@ -17,15 +17,13 @@ void TypingMachine::HomeKey() {
 	// 일반적일 경우
 	// 원래 맨 앞
 	//상황 가장 끝에1
-	
-
 
 	while (CurNode->GetPreviousNode())
 	{
 		CurNode = CurNode->GetPreviousNode();
 	}
-	this->CurNode = CurNode;
-
+	this->CurNode = CurNode; //home
+	
 
   return;
 }
@@ -38,23 +36,11 @@ void TypingMachine::EndKey() {
 	// 원래 맨 앞asdfasdfasf
 	//상황 가장 끝에
 
-
-	if (CurNode->GetNextNode() == nullptr)
-		return;
-	if (CurNode->GetNextNode()) {
-		CurNode = CurNode->GetNextNode();
-		CurNode->ErasePreviousNode();	
-	}
-
-
 	while (CurNode->GetNextNode())
 	{
 		CurNode = CurNode->GetNextNode();
 	}
-	//CurNode->InsertNextNode(this->sperator);
-	this->CurNode = CurNode->GetNextNode();
-
-
+	this->CurNode = CurNode; //home
 
 	return;
 
@@ -68,9 +54,7 @@ void TypingMachine::LeftKey() {
 
 	if (CurNode->GetPreviousNode()) {
 		this->CurNode = CurNode->GetPreviousNode();
-	}
-
-
+	}	
 		
   return;
 }
@@ -85,22 +69,25 @@ void TypingMachine::RightKey() {
 	}
 
 
-
+	
 	return;
 }
 
 bool TypingMachine::TypeKey(char key) {
 
-	Node* CurNode = this->CurNode;
-	if ((32 <= key) && (key <= 126)){
-		CurNode->InsertPreviousNode(key);
-		
-		//this->CurNode = CurNode->GetPreviousNode();
-		this->count++;
-		return true;
-	}
-	else
+	if (this->count == 100)
 		return false;
+
+	Node* CurNode = this->CurNode; //null
+	if ((32 <= key) && (key <= 126)){	
+			CurNode->InsertPreviousNode(key);
+			this->count++;
+			return true;
+		
+	}
+	
+
+	return false;
   
 }
 
@@ -123,7 +110,7 @@ std::string TypingMachine::Print(char separator) {
 	string str;
 
 	Node * CurNode = this->CurNode;
-	
+
 
 	//맨 앞으로 이동
 	while (CurNode != nullptr)
@@ -134,29 +121,18 @@ std::string TypingMachine::Print(char separator) {
 		}
 		else CurNode = CurNode->GetPreviousNode();
 	}
-
 	while (CurNode != nullptr)
 	{
-		if (CurNode == this->CurNode)
-		{
-			if (separator != 0) //0 이 아니고
-			{
-				if (this->CurNode->prev == nullptr) {// home key 이면
-					str.push_back(separator);
-					if (CurNode->GetData() !=' ')
-						str.push_back(CurNode->GetData());
-				}
-				else{
-					if (CurNode->GetData() != ' ')
-						str.push_back(CurNode->GetData());
-					str.push_back(separator);
-				}
-				
-			}			
-		}else
-		str.push_back(CurNode->GetData());
-		CurNode = CurNode->GetNextNode();		
-	}
-	
+		if (CurNode == this->CurNode){
+			if (separator != 0)
+				str.push_back(separator);
+		}
+
+		if (!((CurNode->GetData() ==' ') && (CurNode->GetNextNode()== nullptr)))
+			str.push_back(CurNode->GetData());
+		
+
+		CurNode = CurNode->GetNextNode();
+	}	
   return str;
 }
